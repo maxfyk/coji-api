@@ -6,8 +6,9 @@ RUN apt-get -y update && \
 	gcc \
 	default-libmysqlclient-dev \
 	python3-dev
+
+ENV PYTHONUNBUFFERED = 1
+
 RUN python3 -m pip install -r requirements.txt
 
-COPY . /app
 WORKDIR /app
-ENV PYTHONUNBUFFERED = 1

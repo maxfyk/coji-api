@@ -5,7 +5,8 @@ services:
     build: coji-create
     command: gunicorn main:app -w 2 --threads 2 -b 0.0.0.0:8000
     volumes:
-      - ./static:/app
+      - ./coji-create:/app
+      - ./statics:/app/statics
     expose:
       - "8000"
     ports:
