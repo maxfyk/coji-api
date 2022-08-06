@@ -12,9 +12,9 @@ from statics.constants import (
 app = Flask(__name__)
 
 
-@app.route('/coji-code/create', methods=['POST'])
+@app.route('/coji-code/decode', methods=['get'])
 def coji_create():
-    """Create a new coji and return it as a jpeg image"""
+    """Decode a coji and return its information"""
     json_request = request.json
     print('REQUEST', json_request)
     if not valid_request_keys(json_request, COJI_CREATE_REQUEST_KEYS):
