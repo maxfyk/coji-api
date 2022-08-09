@@ -1,34 +1,24 @@
-import hashlib
-import time
+symbols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']
+n = m = 4  # dimension of key - n*n
+num_keys = (2 ** m) ** (n * n)  # total number of keys
+p = 6364136223846793005
+s = 1442695040888963407
 
-HASH_LEN = 128
-MAX_RETRIES = 6
-alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p']
 db = []  # temporary!
 
 
-def generate_code_id(code_len=16, retries=0):
+# add! support for different code_len
+
+def generate_code_id(code_len=16, index=0, retries=0):
     """Generate random coji code id"""
-    hashed = hashlib.sha512(
-        str(time.time()).encode('utf-8')).hexdigest()  # get random hash (current time is used as seed)
-
-    digits = []
-    for i in range(HASH_LEN):
-        cur_value = hashed[i]
-        if cur_value in alphabet:  # convert chars to int
-            cur_value = str(alphabet.index(cur_value))
-        digits.append(cur_value)
-
-    chunk_len = int(HASH_LEN / code_len)
-    id = []
-    for i in range(0, HASH_LEN, chunk_len):  # group digits in to string of 8 numbers (16 * 8 = 128)
-        letter_i = int(''.join(digits[i:i + chunk_len])) % code_len  # decrese to 0 - 16
-        id.append(alphabet[letter_i])
-
+    sh_idx = (index * p + s) % num_keys  # map to pseudo-random target
+    values = [(sh_idx >> (i * m)) & ((1 << m) - 1)
+              for i in range(n * n)]  # split into m-bit words
+    id = ''.join([symbols[i] for i in values])
     # add!
     # if id in db:  # if code already exists
     #     if retries < MAX_RETRIES:
     #         return generate_code_id(code_len, retries + 1)
     #     else:
     #         return None
-    return ''.join(id)
+    return id

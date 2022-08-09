@@ -1,17 +1,17 @@
-TOTAL_LENGTH = 16
-
 style_info = {
     'name': 'coji-original',
     'size': 600,
-    'rows': 4,
-    'pieces-row': 4,
-    'total_length': TOTAL_LENGTH,
+    'rows': 3,
+    'pieces-row': 3,
     'background-color': (26, 26, 26),
     'border': {
         'border-size': 15,
         'border-color': (255, 191, 0),  # 'yellow',
     }
 }
+
+TOTAL_LENGTH = style_info['rows'] * style_info['pieces-row']
+style_info['total-length'] = TOTAL_LENGTH
 
 name_to_key = {
     'bear': 'a',

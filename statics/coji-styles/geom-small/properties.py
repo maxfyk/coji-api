@@ -1,8 +1,8 @@
 style_info = {
-    'name': 'geom-original',
-    'size': 600,
-    'rows': 4,
-    'pieces-row': 4,
+    'name': 'geom-small',
+    'size': 400,
+    'rows': 3,
+    'pieces-row': 3,
     'background-color': (26, 26, 26),
     'border': {
         'border-size': 15,
