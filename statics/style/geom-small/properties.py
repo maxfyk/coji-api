@@ -10,6 +10,11 @@ style_info = {
     }
 }
 
+model_info = {
+    'settings': ['MODEL.WEIGHTS', 'output/model_final.pth', 'MODEL.ROI_HEADS.SCORE_THRESH_TEST', '0.5',
+                 'MODEL.RETINANET.SCORE_THRESH_TEST', '0.5'],
+    'recognition_supported': True
+}
 TOTAL_LENGTH = style_info['rows'] * style_info['pieces-row']
 style_info['total-length'] = TOTAL_LENGTH
 

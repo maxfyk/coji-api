@@ -9,6 +9,11 @@ style_info = {
         'border-color': (255, 191, 0),  # 'yellow',
     }
 }
+model_info = {
+    'settings': ['MODEL.WEIGHTS', 'output/model_final.pth', 'MODEL.ROI_HEADS.SCORE_THRESH_TEST', '0.80',
+                 'MODEL.RETINANET.SCORE_THRESH_TEST', '0.80'],
+    'recognition_supported': True
+}
 
 TOTAL_LENGTH = style_info['rows'] * style_info['pieces-row']
 style_info['total-length'] = TOTAL_LENGTH
@@ -32,3 +37,5 @@ name_to_key = {
     'x': 'p'
 }
 key_to_name = {v: k for k, v in name_to_key.items()}
+
+names = list(name_to_key.keys())

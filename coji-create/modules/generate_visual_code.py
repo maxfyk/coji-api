@@ -5,13 +5,13 @@ from base64 import encodebytes
 from PIL import Image, ImageOps
 
 
-def pieces_generator(code_id):
+def pieces_generator(code_id: str):
     """Yield code_id char by char"""
     for char in code_id:
         yield char
 
 
-def generate_visual_code(style_module, code_id, style_path):
+def generate_visual_code(style_module: dict, code_id: str, style_path: str):
     """Visualize string code"""
     style_info = style_module['style_info']
     key_to_name = style_module['key_to_name']
