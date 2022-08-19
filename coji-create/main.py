@@ -24,12 +24,12 @@ def coji_create():
         print('STATUS: Unsupported type')
         return jsonify(error=415, text='Unsupported type', notify_user=False), 415
 
-    style_name = json_request['styles-info']['name']
+    style_name = json_request['style-info']['name']
     style_module = get_style_info(style_name)
-    style_module['style_info'].update(json_request['styles-info'])
+    style_module['style_info'].update(json_request['style-info'])
     print(style_module['style_info'])
 
-    char_code = generate_code_id(code_len=style_module['TOTAL_LENGTH'])  # generate random id
+    char_code = generate_code_id(code_len=style_module['style_info']['TOTAL_LENGTH'])  # generate random id
     img = generate_visual_code(style_module, char_code,
                                STYLES_PATH_FULL.format(style_name))  # create image
     # add! save code to db

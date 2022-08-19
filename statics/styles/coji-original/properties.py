@@ -1,4 +1,6 @@
-style_info = {
+style_module = {}
+
+style_module['style-info'] = {
     'name': 'coji-original',
     'size': 600,
     'rows': 3,
@@ -10,15 +12,10 @@ style_info = {
     }
 }
 
-model_info = {
-    'settings': ['MODEL.WEIGHTS', 'output/model_final.pth', 'MODEL.ROI_HEADS.SCORE_THRESH_TEST', '0.5',
-                 'MODEL.RETINANET.SCORE_THRESH_TEST', '0.5'],
-    'recognition_supported': True
-}
-TOTAL_LENGTH = style_info['rows'] * style_info['pieces-row']
-style_info['total-length'] = TOTAL_LENGTH
+style_module['style-info']['total-length'] = \
+    style_module['style-info']['rows'] * style_module['style-info']['pieces-row']
 
-name_to_key = {
+style_module['name_to_key'] = {
     'bear': 'a',
     'cat': 'b',
     'cow': 'c',
@@ -37,4 +34,12 @@ name_to_key = {
     'rabbit': 'p'
 }
 
-key_to_name = {v: k for k, v in name_to_key.items()}
+style_module['key_to_name'] = {v: k for k, v in style_module['name_to_key'].items()}
+
+style_module['names'] = list(style_module['name_to_key'].keys())
+
+# MODEL INFO
+
+style_module['model_info'] = {
+    'recognition_supported': False
+}

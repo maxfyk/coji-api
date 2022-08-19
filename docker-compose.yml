@@ -3,7 +3,7 @@ version: '3.8'
 services:
   coji-create:
     build: coji-create
-    command: gunicorn main:app -w 2 --threads 2 -b 0.0.0.0:8000
+    command: gunicorn main:app -w 1 --threads 2 -b 0.0.0.0:8000
     volumes:
       - ./coji-create:/app
       - ./statics:/app/statics
@@ -18,8 +18,8 @@ services:
       - network
 #
 #  coji-decode:
-#    build: coji-create
-#    command: gunicorn main:app -w 2 --threads 2 -b 0.0.0.0:8000
+#    build: coji-decode
+#    command: gunicorn main:app -w 1 --threads 2 -b 0.0.0.0:8000
 #    volumes:
 #      - ./coji-decode:/app
 #      - ./statics:/app/statics
