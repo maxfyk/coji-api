@@ -1,27 +1,11 @@
 version: '3.8'
 
 services:
-  coji-create:
-    build: coji-create
-    command: gunicorn main:app -w 1 --threads 2 -b 0.0.0.0:8000
-    volumes:
-      - ./coji-create:/app
-      - ./statics:/app/statics
-    expose:
-      - "8000"
-    ports:
-      - "8000:8000"
-    restart: always
-    env_file:
-      - .env
-    networks:
-      - network
-#
-#  coji-decode:
-#    build: coji-decode
+#  coji-create:
+#    build: coji-create
 #    command: gunicorn main:app -w 1 --threads 2 -b 0.0.0.0:8000
 #    volumes:
-#      - ./coji-decode:/app
+#      - ./coji-create:/app
 #      - ./statics:/app/statics
 #    expose:
 #      - "8000"
@@ -32,6 +16,22 @@ services:
 #      - .env
 #    networks:
 #      - network
+
+  coji-decode:
+    build: coji-decode
+    command: gunicorn main:app -w 1 --threads 2 -b 0.0.0.0:8000
+    volumes:
+      - ./coji-decode:/app
+      - ./statics:/app/statics
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - network
 
 networks:
   network: { }

@@ -45,7 +45,7 @@ style_module['names'] = list(style_module['name_to_key'].keys())
 style_module['model_info'] = {
     'settings': ['MODEL.WEIGHTS', f'''/app/statics/styles/{style_module['style-info']['name']}/model/model.pth''',
                  'MODEL.ROI_HEADS.SCORE_THRESH_TEST', '0.80',
-                 'MODEL.RETINANET.SCORE_THRESH_TEST', '0.80', 'MODEL.DEVICE', 'cpu'],
+                 'MODEL.RETINANET.SCORE_THRESH_TEST', '0.80', 'MODEL.DEVICE', 'cpu',  'parallel', True],
     'CONFIG_FILE': f'''/app/statics/styles/{style_module['style-info']['name']}/model/{style_module['style-info']['name']}.yaml''',
     'recognition_supported': True
 }

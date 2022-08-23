@@ -26,10 +26,10 @@ def coji_create():
 
     style_name = json_request['style-info']['name']
     style_module = get_style_info(style_name)
-    style_module['style_info'].update(json_request['style-info'])
-    print(style_module['style_info'])
+    style_module['style-info'].update(json_request['style-info'])
+    print(style_module['style-info'])
 
-    char_code = generate_code_id(code_len=style_module['style_info']['TOTAL_LENGTH'])  # generate random id
+    char_code = generate_code_id(code_len=style_module['style-info']['total-length'])  # generate random id
     img = generate_visual_code(style_module, char_code,
                                STYLES_PATH_FULL.format(style_name))  # create image
     # add! save code to db
