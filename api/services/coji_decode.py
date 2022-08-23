@@ -1,25 +1,23 @@
-from flask import Flask, request
-from flask import jsonify
-
 import base64
+
+from flask import Blueprint
+from flask import jsonify
+from flask import request
+
 from modules.recognize_code import get_prediction
 from statics.commons import (
     get_style_info,
-    valid_request_keys,
-    upd_pickled_styles
+    valid_request_keys
 )
 from statics.constants import (
     COJI_DECODE_REQUEST_KEYS,
-    COJI_DECODE_TYPES,
-    STYLES_PATH_FULL
+    COJI_DECODE_TYPES
 )
 
-app = Flask(__name__)
-print(1)
-upd_pickled_styles()
+coji_decode_bp = Blueprint('coji-decode', __name__)
 
 
-@app.route('/coji-code/decode', methods=['get'])
+@coji_decode_bp.route('/decode', methods=['get'])
 def coji_decode():
     """Decode and return information"""
     json_request = request.json
@@ -54,7 +52,3 @@ def coji_decode():
         'success': True,
         'data': encoded_data,
     }), 200
-
-
-if __name__ == '__main__':
-    app.run('0.0.0.0', debug=True)

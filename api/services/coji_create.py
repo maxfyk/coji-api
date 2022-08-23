@@ -1,5 +1,6 @@
-from flask import Flask, request
+from flask import Blueprint
 from flask import jsonify
+from flask import request
 
 from modules import generate_code_id, generate_visual_code
 from statics.commons import get_style_info, valid_request_keys
@@ -9,10 +10,10 @@ from statics.constants import (
     STYLES_PATH_FULL
 )
 
-app = Flask(__name__)
+coji_create_bp = Blueprint('coji-create', __name__)
 
 
-@app.route('/coji-code/create', methods=['POST'])
+@coji_create_bp.route('/create', methods=['POST'])
 def coji_create():
     """Create a new code and return it as a jpeg image"""
     json_request = request.json

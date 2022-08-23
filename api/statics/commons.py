@@ -33,3 +33,4 @@ def upd_pickled_styles():
         if needs_upd:
             with open(f'/app/statics/styles/{style_name}/comp_properties.pickle', 'wb+') as style_file:
                 dill.dump(style_module, style_file)
+    print('upd_pickled_styles DONE!')
