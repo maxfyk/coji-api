@@ -1,12 +1,11 @@
 version: '3.8'
 
 services:
-  coji-create:
-    build: coji-create
-    command: gunicorn main:app -w 2 --threads 2 -b 0.0.0.0:8000
+  coji-api:
+    build: .
+    command: gunicorn api:app -w 1 --threads 2 -b 0.0.0.0:8000
     volumes:
-      - ./coji-create:/app
-      - ./statics:/app/statics
+      - ./api:/app
     expose:
       - "8000"
     ports:
