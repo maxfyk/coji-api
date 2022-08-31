@@ -1,8 +1,15 @@
+from datetime import datetime
+
 from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-from modules import generate_code_id, generate_visual_code
+from modules import (
+    generate_code_id,
+    generate_visual_code,
+)
+from modules.formator import prepare_code_info
+from modules.db_operations import add_new_code, get_last_code
 from statics.commons import get_style_info, valid_request_keys
 from statics.constants import (
     COJI_CREATE_REQUEST_KEYS,
@@ -25,22 +32,26 @@ def coji_create():
         print('STATUS: Unsupported type')
         return jsonify(error=415, text='Unsupported type', notify_user=False), 415
 
+    json_request['time-created'] = json_request['time-updated'] = str(datetime.now())
+
     style_name = json_request['style-info']['name']
     style_module = get_style_info(style_name)
     style_module['style-info'].update(json_request['style-info'])
-    print(style_module['style-info'])
 
-    char_code = generate_code_id(code_len=style_module['style-info']['total-length'])  # generate random id
+    _, index = get_last_code().popitem()
+    index = index['index'] + 1
+    json_request['index'] = index
+    char_code = generate_code_id(code_len=style_module['style-info']['total-length'],
+                                 index=index)  # generate random id
     img = generate_visual_code(style_module, char_code,
                                STYLES_PATH_FULL.format(style_name))  # create image
     # add! save code to db
+    new_code = prepare_code_info(json_request, char_code)
+    add_new_code(new_code)
+    print(new_code)
     print('STATUS: success')
     return jsonify({
         'success': True,
         'code': char_code,
         'image': img,
     }), 200
-
-
-if __name__ == '__main__':
-    app.run('0.0.0.0', debug=True)

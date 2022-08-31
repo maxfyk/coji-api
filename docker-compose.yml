@@ -3,15 +3,14 @@ version: '3.8'
 services:
   coji-api:
     build: .
+    env_file:
+      - .api-env
     volumes:
       - ./api:/app
     ports:
       - "8000:8000"
     restart: always
-    env_file:
-      - .env
     networks:
       - network
-
 networks:
   network: { }

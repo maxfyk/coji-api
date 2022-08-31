@@ -4,7 +4,7 @@ import os
 # main
 COJI_DATA_TYPES = ('text', 'url', 'image')  # 'video', 'file', 'ar'
 COJI_CREATE_REQUEST_KEYS = ('in-data', 'data-type', 'user-id', 'style-info')
-
+COJI_DB_CODE_FIELDS = ('index', 'in-data', 'data-type', 'user-id', 'style-info', 'time-created', 'time-updated')
 # coji-decode
 # main
 COJI_DECODE_TYPES = ('image', 'keyboard')  # 'location'

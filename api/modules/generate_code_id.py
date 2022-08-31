@@ -9,7 +9,7 @@ db = []  # temporary!
 
 # add! support for different code_len
 
-def generate_code_id(code_len=16, index=0, retries=0):
+def generate_code_id(index, code_len=16, retries=0):
     """Generate random coji code id"""
     sh_idx = (index * p + s) % num_keys  # map to pseudo-random target
     values = [(sh_idx >> (i * m)) & ((1 << m) - 1)

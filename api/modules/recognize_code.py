@@ -1,8 +1,9 @@
 import cv2
 import numpy as np
 
-
 # WILL BE MOVED TO FRONT-END LATER
+__all__ = ['recognize_code']
+
 
 def get_matches_only(preds):
     """Sort predictions by their location and score; return classnames only"""
@@ -25,7 +26,7 @@ def get_matches_only(preds):
     return [p['class'] for p in predictions]
 
 
-def get_prediction(image_bytes: bytes, style_module: dict):
+def recognize_code(image_bytes: bytes, style_module: dict):
     """Recognize code pieces on the image and return the recognized code as a string"""
     predictor = style_module['model_info']['predictor']
 

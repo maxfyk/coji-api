@@ -3,6 +3,7 @@ FROM python:3.9-slim-buster
 ENV PYTHONUNBUFFERED = 1
 COPY requirements.txt /
 COPY start.sh /start.sh
+COPY firebase_key.json /firebase_key.json
 COPY nginx.conf /etc/nginx/conf.d/virtual.conf
 
 RUN apt-get -y update && \
@@ -26,7 +27,5 @@ RUN python3 -m pip install -r requirements.txt
 
 WORKDIR /app
 
-
 EXPOSE 80
-RUN chmod +x /start.sh
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["sh", "/start.sh"]
