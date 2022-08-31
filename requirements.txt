@@ -5,4 +5,5 @@ Pillow===6.2.2
 opencv-contrib-python==4.6.*
 git+https://github.com/facebookresearch/detectron2.git@d3b9f7b47fb24a1c60cd5ec423f550c57d3e6366
 pycocotools
+firebase_admin
 dill
