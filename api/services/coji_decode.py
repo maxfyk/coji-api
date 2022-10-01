@@ -22,6 +22,7 @@ coji_decode_bp = Blueprint('coji-decode', __name__)
 def coji_decode():
     """Decode and return information"""
     json_request = request.json
+    # add! CHECK FOR VALID IMAGE
     print('DECODE| REQUEST', json_request['decode-type'], json_request['user-id'])
     if not valid_request_keys(json_request, COJI_DECODE_REQUEST_KEYS):
         print('STATUS: Missing required keys')

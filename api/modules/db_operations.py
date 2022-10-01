@@ -6,7 +6,7 @@ import firebase_admin
 
 def init_db_app():
     """Initialize database"""
-    cred = credentials.Certificate(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+    cred = credentials.Certificate('/firebase_key.json')
     firebase_admin.initialize_app(cred, {
         'databaseURL': os.environ['FIREBASE_DB_URL']
     })
