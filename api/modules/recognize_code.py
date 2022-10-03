@@ -1,5 +1,6 @@
-import cv2
-import numpy as np
+import base64
+import io
+from imageio import imread
 
 # WILL BE MOVED TO FRONT-END LATER
 __all__ = ['recognize_code']
@@ -30,12 +31,11 @@ def recognize_code(image_bytes: bytes, style_module: dict):
     """Recognize code pieces on the image and return the recognized code as a string"""
     predictor = style_module['model_info']['predictor']
 
-    image_np = np.frombuffer(image_bytes, dtype=np.uint8)
-    img = cv2.imdecode(image_np, flags=1)
+    img = imread(io.BytesIO(base64.b64decode(image_bytes)), pilmode='RGB')
+
     predictions = predictor(img)
 
     pred_classes = get_matches_only(predictions['instances'])
-
     if pred_classes:
         names = style_module['names']
         name_to_key = style_module['name_to_key']

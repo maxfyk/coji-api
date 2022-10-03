@@ -51,7 +51,7 @@ def coji_create():
     print(new_code)
     print('STATUS: success')
     return jsonify({
-        'success': True,
+        'error': False,
         'code': char_code,
         'image': img,
     }), 200

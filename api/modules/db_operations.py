@@ -40,7 +40,7 @@ def add_new_code(new_code, db_root=None):
 
 
 def find_code(code_id, db_root=None):
-    """Add new code to db"""
+    """Get coded info from db"""
     if not db_root:
         db_root = get_db_session()
     return db_root.child(f'code/{code_id}').get()

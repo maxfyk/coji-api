@@ -1,5 +1,6 @@
 #!/bin/bash
 echo "Starting to trigger gunicorn"
-gunicorn api:app -w 1 --threads 2 -b 0.0.0.0:8000 &
+#gunicorn api:app -w 1 --threads 2 -b 0.0.0.0:8000 &
+python api.py
 echo "Starting Nginx Service"
 nginx -g 'daemon off;'

@@ -18,7 +18,7 @@ from statics.constants import (
 coji_decode_bp = Blueprint('coji-decode', __name__)
 
 
-@coji_decode_bp.route('/decode', methods=['get'])
+@coji_decode_bp.route('/decode', methods=['get', 'post'])
 def coji_decode():
     """Decode and return information"""
     json_request = request.json
@@ -34,15 +34,17 @@ def coji_decode():
     style_name = json_request['style-info']['name']
     style_module = get_style_info(style_name)
     style_module['style-info'].update(json_request['style-info'])
-    print(style_module['style-info'])
 
     char_code = None
     if json_request['decode-type'] == 'image':
-        image_str = base64.b64decode(json_request['in-data'])
+        image_str = json_request['in-data']
+        if 'data:image/png' in image_str:  # if image contains a tag
+            image_str = image_str.split(',')[1]
+
         char_code = recognize_code(image_str, style_module)  # recognize code on image
         if not char_code:
             print('STATUS: bad image')
-            return jsonify(error=404, text='Code not found, bad image', notify_user=False), 422
+            return jsonify(error=404, text='Code not found :(\nPlease try again!', notify_user=False), 422
         print('Code found:', char_code)
     else:
         char_code = json_request['in-data']
@@ -50,6 +52,6 @@ def coji_decode():
     print('STATUS: success')
     print('---------------')
     return jsonify({
-        'success': True,
+        'error': False,
         'data': encoded_data,
     }), 200
