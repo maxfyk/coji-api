@@ -4,7 +4,7 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-from modules.db_operations import find_code
+from modules.db_operations import find_code, get_code
 from modules import recognize_code
 from statics.commons import (
     get_style_info,
@@ -20,7 +20,7 @@ coji_decode_bp = Blueprint('coji-decode', __name__)
 
 @coji_decode_bp.route('/decode', methods=['get', 'post'])
 def coji_decode():
-    """Decode and return information"""
+    """Decode and return if code exist"""
     json_request = request.json
     # add! CHECK FOR VALID IMAGE
     print('DECODE| REQUEST', json_request['decode-type'], json_request['user-id'])
@@ -48,10 +48,29 @@ def coji_decode():
         print('Code found:', char_code)
     else:
         char_code = json_request['in-data']
-    encoded_data = find_code(char_code)
+    char_code = 'kmfkkmlfdkafcgfd'  # FOR DEBUGGING
+    code_exists = find_code(char_code)
+    if code_exists is None:
+        return jsonify(error=404, text='This code no longer exists!', notify_user=False), 422
+
     print('STATUS: success')
     print('---------------')
     return jsonify({
         'error': False,
-        'data': encoded_data,
+        'code-id': char_code,
+    }), 200
+
+
+@coji_decode_bp.route('/get/<id>', methods=['get'])
+def coji_get(id):
+    """Get all the info about code by id"""
+    print('GET| REQUEST', id)
+    code_data = get_code(id)
+    if code_data is None:
+        return jsonify(error=404, data={}, notify_user=False), 422
+    print('STATUS: success')
+    print('---------------')
+    return jsonify({
+        'error': False,
+        'data': code_data,
     }), 200

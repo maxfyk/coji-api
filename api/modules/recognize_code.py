@@ -33,8 +33,9 @@ def recognize_code(image_bytes: bytes, style_module: dict):
 
     img = imread(io.BytesIO(base64.b64decode(image_bytes)), pilmode='RGB')
 
+    print('before predictor')
     predictions = predictor(img)
-
+    print('after')
     pred_classes = get_matches_only(predictions['instances'])
     if pred_classes:
         names = style_module['names']

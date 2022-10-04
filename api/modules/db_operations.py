@@ -39,8 +39,15 @@ def add_new_code(new_code, db_root=None):
     return db_root.child(f'code/{code_id}').set(data)
 
 
-def find_code(code_id, db_root=None):
-    """Get coded info from db"""
+def find_code(code_id, child='index', db_root=None):
+    """Check if code exists from db"""
+    if not db_root:
+        db_root = get_db_session()
+    return db_root.child(f'code/{code_id}').child(child).get()
+
+
+def get_code(code_id, db_root=None):
+    """Get encoded data from db"""
     if not db_root:
         db_root = get_db_session()
     return db_root.child(f'code/{code_id}').get()
