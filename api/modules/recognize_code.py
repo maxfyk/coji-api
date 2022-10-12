@@ -3,7 +3,7 @@ import io
 import cv2
 import numpy as np
 from imageio import imread
-from cv_approach import cv_detector
+from .cv_approach import cv_detector
 
 # WILL BE MOVED TO FRONT-END LATER
 __all__ = ['recognize_code']
@@ -45,7 +45,7 @@ def recognize_code(image_bytes: bytes, style_module: dict):
             out_code = ''.join([name_to_key[names[p]] for p in pred_classes])
             return out_code
     else:
-        img = np.frombuffer(img, dtype=np.uint8)
+        img = np.frombuffer(img.read(), dtype=np.uint8)
         img = cv2.imdecode(img, flags=1)
         try:
             return cv_detector(img)

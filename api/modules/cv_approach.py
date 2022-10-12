@@ -167,7 +167,7 @@ def decode_pieces(main_square):
         'v-bar': 'o',
         'x': 'p'
     }
-    path = 'C:\\Users\\maxfyk\\Documents\\coji\\coji-api\\api\\statics\\styles\\geom-original\\pieces\\bw\\'
+    path = '/app/statics/styles/geom-original/pieces/bw/'
     pieces = [{'img': cv2.imread(path + p + '.png', 0), 'name': p} for p in pieces_names.keys()]
 
     codes = []
