@@ -1,6 +1,9 @@
 import base64
 import io
+import cv2
+import numpy as np
 from imageio import imread
+from cv_approach import cv_detector
 
 # WILL BE MOVED TO FRONT-END LATER
 __all__ = ['recognize_code']
@@ -29,18 +32,25 @@ def get_matches_only(preds):
 
 def recognize_code(image_bytes: bytes, style_module: dict):
     """Recognize code pieces on the image and return the recognized code as a string"""
-    predictor = style_module['model_info']['predictor']
+    img = io.BytesIO(base64.b64decode(image_bytes))
+    if style_module['model_info']['ml_recognition_supported']:
+        predictor = style_module['model_info']['predictor']
+        img = imread(img, pilmode='RGB')
 
-    img = imread(io.BytesIO(base64.b64decode(image_bytes)), pilmode='RGB')
-
-    predictions = predictor(img)
-    pred_classes = get_matches_only(predictions['instances'])
-    if pred_classes:
-        names = style_module['names']
-        name_to_key = style_module['name_to_key']
-        out_code = ''.join([name_to_key[names[p]] for p in pred_classes])
-        return out_code
-
+        predictions = predictor(img)
+        pred_classes = get_matches_only(predictions['instances'])
+        if pred_classes:
+            names = style_module['names']
+            name_to_key = style_module['name_to_key']
+            out_code = ''.join([name_to_key[names[p]] for p in pred_classes])
+            return out_code
+    else:
+        img = np.frombuffer(img, dtype=np.uint8)
+        img = cv2.imdecode(img, flags=1)
+        try:
+            return cv_detector(img)
+        except Exception as e:
+            print(e)
     return None
 
 
