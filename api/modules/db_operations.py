@@ -57,4 +57,4 @@ def get_all_keys(db_root=None):
     """Get list of all keys that currently exist"""
     if not db_root:
         db_root = get_db_session()
-    return db_root.child(f'code').get(shallow=True)
+    return db_root.child('code').get(shallow=True)

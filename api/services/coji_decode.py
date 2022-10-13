@@ -44,11 +44,11 @@ def coji_decode():
         image_str = json_request['in-data']
         if 'data:image/' in image_str:  # if image contains a tag
             image_str = image_str.split(',')[1]
-            try:
-                char_code = recognize_code(image_str, style_module)  # recognize code on image
-            except Exception as e:
-                print(e)
-                char_code = None
+        try:
+            char_code = recognize_code(image_str, style_module)  # recognize code on image
+        except Exception as e:
+            print(e)
+            char_code = None
         if not char_code:
             print('STATUS: bad image')
             return jsonify(error=404, text='Code not found :(\nPlease try again!', notify_user=False), 422
@@ -56,8 +56,12 @@ def coji_decode():
         char_code = json_request['in-data']
     print('Code found:', char_code)
 
-    all_keys = get_all_keys(char_code)
+    all_keys = get_all_keys()
     code_guess = difflib.get_close_matches(char_code, all_keys)
+    if not len(code_guess):
+        print('No db matches...')
+        return jsonify(error=404, text=f'Bad photo, please try again!', notify_user=False), 422
+
     print('Code guess:', code_guess)
 
     similarity = difflib.SequenceMatcher(None, char_code, code_guess).ratio()
@@ -65,7 +69,7 @@ def coji_decode():
         print('low similarity:', similarity)
         return jsonify(error=404, text=f'Bad photo, please try again!', notify_user=False), 422
 
-    code_exists = find_code(char_code)
+    code_exists = find_code(code_guess)
     if code_exists is None:
         return jsonify(error=404, text=f'This code no longer exists!\nCode:{char_code}', notify_user=False), 422
 
