@@ -46,7 +46,8 @@ def coji_decode():
             image_str = image_str.split(',')[1]
             try:
                 char_code = recognize_code(image_str, style_module)  # recognize code on image
-            except Exception as _:
+            except Exception as e:
+                print(e)
                 char_code = None
         if not char_code:
             print('STATUS: bad image')
@@ -61,6 +62,7 @@ def coji_decode():
 
     similarity = difflib.SequenceMatcher(None, char_code, code_guess).ratio()
     if similarity < 0.6:
+        print('low similarity:', similarity)
         return jsonify(error=404, text=f'Bad photo, please try again!', notify_user=False), 422
 
     code_exists = find_code(char_code)
