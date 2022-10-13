@@ -51,3 +51,10 @@ def get_code(code_id, db_root=None):
     if not db_root:
         db_root = get_db_session()
     return db_root.child(f'code/{code_id}').get()
+
+
+def get_all_keys(db_root=None):
+    """Get list of all keys that currently exist"""
+    if not db_root:
+        db_root = get_db_session()
+    return db_root.child(f'code/').get(shallow=True)

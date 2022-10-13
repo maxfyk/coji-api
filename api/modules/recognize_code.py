@@ -47,6 +47,7 @@ def recognize_code(image_bytes: bytes, style_module: dict):
     else:
         img = np.frombuffer(img.read(), dtype=np.uint8)
         img = cv2.imdecode(img, flags=1)
+        cv_detector(img)
         try:
             return cv_detector(img)
         except Exception as e:

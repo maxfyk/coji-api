@@ -1,10 +1,14 @@
 import base64
-
+import difflib
 from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-from modules.db_operations import find_code, get_code
+from modules.db_operations import (
+    find_code,
+    get_code,
+    get_all_keys
+)
 from modules import recognize_code
 from statics.commons import (
     get_style_info,
@@ -38,9 +42,8 @@ def coji_decode():
     char_code = None
     if json_request['decode-type'] == 'image':
         image_str = json_request['in-data']
-        if 'data:image/png' in image_str:  # if image contains a tag
+        if 'data:image/' in image_str:  # if image contains a tag
             image_str = image_str.split(',')[1]
-
         char_code = recognize_code(image_str, style_module)  # recognize code on image
         if not char_code:
             print('STATUS: bad image')
@@ -48,11 +51,13 @@ def coji_decode():
         print('Code found:', char_code)
     else:
         char_code = json_request['in-data']
-    char_code = 'kmfkkmlfdkafcgfd'  # FOR DEBUGGING
     code_exists = find_code(char_code)
     if code_exists is None:
-        return jsonify(error=404, text='This code no longer exists!', notify_user=False), 422
+        return jsonify(error=404, text=f'This code no longer exists!\nCode:{char_code}', notify_user=False), 422
 
+    all_keys = get_all_keys(char_code)
+
+    code_guess = difflib.get_close_matches(char_code, all_keys)
     print('STATUS: success')
     print('---------------')
     return jsonify({

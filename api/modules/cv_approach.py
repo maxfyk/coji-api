@@ -135,7 +135,7 @@ def decode_pieces(main_square):
             x_offset = int(x * 0.7)
             tile = main_square[x_offset:x_offset + M, y_offset:y_offset + N]
             tile = cv2.cvtColor(tile, cv2.COLOR_BGR2GRAY)
-            tile = cv2.threshold(tile, 100, 255, cv2.THRESH_OTSU)[1]
+            tile = cv2.threshold(tile, 100, 255, cv2.THRESH_BINARY | cv2.THRESH_TRIANGLE)[1]
             tile_o = get_best_match(tile, area_t=(tile.shape[0] * 0.2) ** 2, border_threshold=True, is_gray=True,
                                     center_score=False)
             if tile_o:
@@ -183,7 +183,11 @@ def decode_pieces(main_square):
         # print(stats[0][0])
         # cv2.imshow('tile', tile)
         # cv2.waitKey(0)
-    return ''.join(codes)
+    out_code = ''
+    for i in range(4):
+        for j in range(0, 16, 4):
+            out_code += codes[i + j]
+    return out_code
 
 
 def cv_detector(img_orig):
@@ -192,7 +196,7 @@ def cv_detector(img_orig):
     # cv2.waitKey(0)
     top_match = get_best_match(img_orig)
     x, y, w, h = cv2.boundingRect(top_match['object'])
-    top_match = img_orig[y  :y + h, x:x + w]
+    top_match = img_orig[y:y + h, x:x + w]
 
     trapeze = get_trapeze_contour(top_match)
     square = four_point_transform(top_match, trapeze.reshape(4, 2))
@@ -212,5 +216,6 @@ def cv_detector(img_orig):
 
 
 if __name__ == '__main__':
-    code = cv_detector(cv2.imread('C:\\Users\\maxfyk\\Downloads\\code.jpg'))  # C:\\Users\\maxfyk\\Downloads\\photo_2022-08-15_12-32-03.jpg
+    code = cv_detector(cv2.imread(
+        'C:\\Users\\maxfyk\\Downloads\\code.jpg'))  # C:\\Users\\maxfyk\\Downloads\\photo_2022-08-15_12-32-03.jpg
     print(code)
