@@ -51,7 +51,7 @@ def recognize_code(image_bytes: bytes, style_module: dict):
         try:
             return cv_detector(img)
         except Exception as e:
-            print(e)
+            print(e[:100])
     return None
 
 

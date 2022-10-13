@@ -62,7 +62,7 @@ def coji_decode():
     print('---------------')
     return jsonify({
         'error': False,
-        'code-id': char_code,
+        'code-id': code_guess,
     }), 200
 
 
