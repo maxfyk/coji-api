@@ -48,16 +48,18 @@ def coji_decode():
         if not char_code:
             print('STATUS: bad image')
             return jsonify(error=404, text='Code not found :(\nPlease try again!', notify_user=False), 422
-        print('Code found:', char_code)
     else:
         char_code = json_request['in-data']
+    print('Code found:', char_code)
+
+    all_keys = get_all_keys(char_code)
+    code_guess = difflib.get_close_matches(char_code, all_keys)
+    print('Code guess:', code_guess)
+
     code_exists = find_code(char_code)
     if code_exists is None:
         return jsonify(error=404, text=f'This code no longer exists!\nCode:{char_code}', notify_user=False), 422
-
-    all_keys = get_all_keys(char_code)
-
-    code_guess = difflib.get_close_matches(char_code, all_keys)
+    
     print('STATUS: success')
     print('---------------')
     return jsonify({
