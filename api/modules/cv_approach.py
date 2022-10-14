@@ -2,6 +2,17 @@ import cv2
 import numpy as np
 
 
+def change_brightness(img, value=40):
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    h, s, v = cv2.split(hsv)
+    v = cv2.add(v, value)
+    v[v > 255] = 255
+    v[v < 0] = 0
+    final_hsv = cv2.merge((h, s, v))
+    img = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
+    return img
+
+
 def get_trapeze_contour(trapeze):
     biliat_imge = cv2.bilateralFilter(trapeze, 5, 175, 175)
 
@@ -145,8 +156,6 @@ def decode_pieces(main_square):
             tile_o = np.zeros((160, 160), np.uint8)
             tile_o[12:148, 12:148] = tile
             tile_o = remove_noise(tile_o)
-            # cv2.imshow('tile', tile_o)
-            # cv2.waitKey(0)
             tiles.append(tile_o)
 
     pieces_names = {
@@ -173,16 +182,10 @@ def decode_pieces(main_square):
     codes = []
     for tile in tiles:
         stats = {}
-        # codes.append([])
         for piece in pieces:
-            # replace areas of transparency with white and not transparent
             stats[piece['name']] = cv2.matchTemplate(tile, piece['img'], cv2.TM_CCOEFF_NORMED).max()
         stats = list(sorted(stats.items(), key=lambda item: -item[1]))
-        # [codes[-1].append(pieces_names[s[0]]) for s in stats[:3]]
         codes.append(pieces_names[stats[0][0]])
-        # print(stats[0][0])
-        # cv2.imshow('tile', tile)
-        # cv2.waitKey(0)
     out_code = ''
     for i in range(4):
         for j in range(0, 16, 4):
@@ -192,26 +195,20 @@ def decode_pieces(main_square):
 
 def cv_detector(img_orig):
     """Returns decoded char code"""
-    # cv2.imshow('image', img_orig)
-    # cv2.waitKey(0)
     top_match = get_best_match(img_orig)
     x, y, w, h = cv2.boundingRect(top_match['object'])
     top_match = img_orig[y:y + h, x:x + w]
 
     trapeze = get_trapeze_contour(top_match)
     square = four_point_transform(top_match, trapeze.reshape(4, 2))
-    # cv2.imshow('image', square)
-    # cv2.waitKey(0)
     square_no_border = get_best_match(square, border_threshold=True)
     if square_no_border:
         x, y, w, h = cv2.boundingRect(square_no_border['object'])
         x, y = int(x * 0.9), int(y * 0.9)
         w, h = int(w * 1.4), int(h * 1.4)
         square = square[y:y + h, x:x + w]
-    # square = cv2.convertScaleAbs(square, alpha=2, beta=0)
-    # square = cv2.blur(square, (5, 5))
-    # cv2.imshow('image', square)
-    # cv2.waitKey(0)
+    square = change_brightness(square, value=40)  # increases
+
     return decode_pieces(square)
 
 

@@ -62,11 +62,14 @@ def coji_decode():
         print('No db matches...')
         return jsonify(error=404, text=f'Bad photo, please try again!', notify_user=False), 422
 
+    code_guess = code_guess[0]
     print('Code guess:', code_guess)
 
     similarity = difflib.SequenceMatcher(None, char_code, code_guess).ratio()
+
+    print('Similarity:', similarity)
+
     if similarity < 0.6:
-        print('low similarity:', similarity)
         return jsonify(error=404, text=f'Bad photo, please try again!', notify_user=False), 422
 
     code_exists = find_code(code_guess)
