@@ -18,7 +18,10 @@ RUN apt-get -y update && \
     ffmpeg \
     libsm6 \
     libxext6 \
-    nginx
+    nginx \
+    ca-certificates \
+    openssl
+
 
 RUN python3 -m pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
 RUN python3 -m pip install -r requirements.txt

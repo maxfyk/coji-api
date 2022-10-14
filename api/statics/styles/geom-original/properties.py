@@ -47,7 +47,7 @@ style_module['model_info'] = {
                  'MODEL.ROI_HEADS.SCORE_THRESH_TEST', '0.80',
                  'MODEL.RETINANET.SCORE_THRESH_TEST', '0.80', 'MODEL.DEVICE', 'cpu'],
     'CONFIG_FILE': f'''/app/statics/styles/{style_module['style-info']['name']}/model/{style_module['style-info']['name']}.yaml''',
-    'recognition_supported': True
+    'ml_recognition_supported': False
 }
 
 style_module['model_info']['model_cfg'] = get_cfg()
