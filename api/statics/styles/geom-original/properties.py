@@ -1,5 +1,5 @@
-from detectron2.config import get_cfg
-from detectron2.engine import DefaultPredictor
+# from detectron2.config import get_cfg
+# from detectron2.engine import DefaultPredictor
 
 style_module = {}
 
@@ -49,10 +49,10 @@ style_module['model_info'] = {
     'CONFIG_FILE': f'''/app/statics/styles/{style_module['style-info']['name']}/model/{style_module['style-info']['name']}.yaml''',
     'ml_recognition_supported': False
 }
-
-style_module['model_info']['model_cfg'] = get_cfg()
-style_module['model_info']['model_cfg'].merge_from_file(style_module['model_info']['CONFIG_FILE'])
-style_module['model_info']['model_cfg'].merge_from_list(style_module['model_info']['settings'])
-style_module['model_info']['model_cfg'].freeze()
-style_module['model_info']['predictor'] = DefaultPredictor(style_module['model_info']['model_cfg'])
-
+#
+# style_module['model_info']['model_cfg'] = get_cfg()
+# style_module['model_info']['model_cfg'].merge_from_file(style_module['model_info']['CONFIG_FILE'])
+# style_module['model_info']['model_cfg'].merge_from_list(style_module['model_info']['settings'])
+# style_module['model_info']['model_cfg'].freeze()
+# style_module['model_info']['predictor'] = DefaultPredictor(style_module['model_info']['model_cfg'])
+#
