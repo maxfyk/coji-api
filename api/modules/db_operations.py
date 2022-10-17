@@ -43,7 +43,7 @@ def update_code(code_id, in_data, db_root=None):
     """Update existing code"""
     if not db_root:
         db_root = get_db_session()
-    code_exists = find_code(code_id, db_root)
+    code_exists = find_code(code_id)
     if code_exists:
         return db_root.child(f'code/{code_id}').update(in_data)
     return False
