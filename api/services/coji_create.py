@@ -33,6 +33,7 @@ def coji_create():
         print('STATUS: Unsupported type')
         return jsonify(error=415, text='Unsupported type', notify_user=False), 415
 
+    json_request['time-created'] = json_request['time-updated'] = str(datetime.now())
     json_request['time-updated'] = str(datetime.now())
 
     style_name = json_request['style-info']['name']
@@ -70,7 +71,7 @@ def coji_update():
         print('STATUS: Unsupported type')
         return jsonify(error=415, text='Unsupported type', notify_user=False), 415
 
-    json_request['time-created'] = json_request['time-updated'] = str(datetime.now())
+    json_request['time-updated'] = str(datetime.now())
 
     style_name = json_request['style-info']['name']
     style_module = get_style_info(style_name)
