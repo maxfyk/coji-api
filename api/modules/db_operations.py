@@ -39,6 +39,16 @@ def add_new_code(new_code, db_root=None):
     return db_root.child(f'code/{code_id}').set(data)
 
 
+def update_code(code_id, in_data, db_root=None):
+    """Update existing code"""
+    if not db_root:
+        db_root = get_db_session()
+    code_exists = find_code(code_id)
+    if code_exists:
+        return db_root.child(f'code/{code_id}').update(in_data)
+    return False
+
+
 def find_code(code_id, child='index', db_root=None):
     """Check if code exists from db"""
     if not db_root:
