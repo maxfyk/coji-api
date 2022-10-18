@@ -52,7 +52,7 @@ def coji_decode():
         if not char_code:
             print('STATUS: bad image')
             return jsonify(error=404, text='Code not found :(\nPlease try again!', notify_user=False), 422
-    else:
+    elif json_request['decode-type'] == 'keyboard':
         char_code = json_request['in-data']
     print('Code found:', char_code)
 
@@ -69,7 +69,7 @@ def coji_decode():
 
     print('Similarity:', similarity)
 
-    if similarity < 0.6:
+    if similarity < 0.8:
         return jsonify(error=404, text=f'Bad photo, please try again!', notify_user=False), 422
 
     code_exists = find_code(code_guess)
