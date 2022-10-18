@@ -69,7 +69,7 @@ def coji_decode():
 
     print('Similarity:', similarity)
 
-    if similarity < 0.8:
+    if similarity < 0.5:
         return jsonify(error=404, text=f'Bad photo, please try again!', notify_user=False), 422
 
     code_exists = find_code(code_guess)
