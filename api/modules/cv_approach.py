@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+PATH = '/app/statics/styles/geom-original/pieces/bw/'  # 'C:\\Users\\maxfyk\\Documents\\coji\\coji-api\\api\\statics\styles\\geom-original\\pieces\\bw\\'  
+
 
 def change_brightness(img, value=40):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
@@ -27,7 +29,7 @@ def get_trapeze_contour(trapeze):
     return corners
 
 
-def get_best_match(img, area_t=20000, border_threshold=False, is_gray=False, center_score=True):
+def get_best_match(img, area_t=10000, border_threshold=False, is_gray=False, center_score=True):
     """Find the best square"""
     img = cv2.imread(img) if type(img) is str else img
 
@@ -152,6 +154,8 @@ def decode_pieces(main_square):
             if tile_o:
                 x_n, y_n, w_n, h_n = cv2.boundingRect(tile_o['object'])
                 tile = tile[y_n:y_n + h_n, x_n:x_n + w_n]
+            # cv2.imshow('tile', tile)
+            # cv2.waitKey(0)
             tile = cv2.resize(tile, (160 - 12 * 2, 160 - 12 * 2), interpolation=cv2.INTER_AREA)  # piece size - border
             tile_o = np.zeros((160, 160), np.uint8)
             tile_o[12:148, 12:148] = tile
@@ -176,8 +180,7 @@ def decode_pieces(main_square):
         'v-bar': 'o',
         'x': 'p'
     }
-    path = '/app/statics/styles/geom-original/pieces/bw/'
-    pieces = [{'img': cv2.imread(path + p + '.png', 0), 'name': p} for p in pieces_names.keys()]
+    pieces = [{'img': cv2.imread(PATH + p + '.png', 0), 'name': p} for p in pieces_names.keys()]
 
     codes = []
     for tile in tiles:
@@ -185,6 +188,7 @@ def decode_pieces(main_square):
         for piece in pieces:
             stats[piece['name']] = cv2.matchTemplate(tile, piece['img'], cv2.TM_CCOEFF_NORMED).max()
         stats = list(sorted(stats.items(), key=lambda item: -item[1]))
+        print(stats[0][0])
         codes.append(pieces_names[stats[0][0]])
     out_code = ''
     for i in range(4):
@@ -198,21 +202,31 @@ def cv_detector(img_orig):
     top_match = get_best_match(img_orig)
     x, y, w, h = cv2.boundingRect(top_match['object'])
     top_match = img_orig[y:y + h, x:x + w]
-
+    # cv2.imshow('image', top_match)
+    # cv2.waitKey(0)
     trapeze = get_trapeze_contour(top_match)
+
     square = four_point_transform(top_match, trapeze.reshape(4, 2))
+    # cv2.imshow('image', square)
+    # cv2.waitKey(0)
     square_no_border = get_best_match(square, border_threshold=True)
+    # cv2.imshow('image', square_no_border)
+    # cv2.waitKey(0)
     if square_no_border:
         x, y, w, h = cv2.boundingRect(square_no_border['object'])
         x, y = int(x * 0.9), int(y * 0.9)
         w, h = int(w * 1.4), int(h * 1.4)
         square = square[y:y + h, x:x + w]
     square = change_brightness(square, value=40)  # increases
-
+    # cv2.imshow('image', square)
+    # cv2.waitKey(0)
+    # square = cv2.convertScaleAbs(square, alpha=2, beta=0)
+    # square = cv2.blur(square, (5, 5))
+    # cv2.imshow('image', square)
+    # cv2.waitKey(0)
     return decode_pieces(square)
 
 
 if __name__ == '__main__':
     code = cv_detector(cv2.imread(
-        'C:\\Users\\maxfyk\\Downloads\\code.jpg'))  # C:\\Users\\maxfyk\\Downloads\\photo_2022-08-15_12-32-03.jpg
-    print(code)
+        'C:\\Users\\maxfyk\\Downloads\\x-test.png'))  # C:\\Users\\maxfyk\\Downloads\\photo_2022-08-15_12-32-03.jpg
