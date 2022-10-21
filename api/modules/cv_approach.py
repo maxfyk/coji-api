@@ -26,11 +26,25 @@ def get_trapeze_contour(trapeze):
     perim = cv2.arcLength(contours[0], True)
     epsilon = 0.02 * perim
     corners = cv2.approxPolyDP(contours[0], epsilon, True)
+    x, y = [], []
+    for c in corners:
+        x.append(c[0][0])
+        y.append(c[0][1])
+    x_min, x_max = min(x), max(x)
+    y_min, y_max = min(y), max(y)
+    corners = np.array([
+        [[x_min, y_min]],
+        [[x_min, y_max]],
+        [[x_max, y_max]],
+        [[x_max, y_min]],
+    ])
     return corners
 
 
-def get_best_match(img, area_t=5000, border_threshold=False, is_gray=False, center_score=True):
+def get_best_match(img, area_t=20000, border_threshold=False, is_gray=False, center_score=True):
     """Find the best square"""
+    if area_t <= 1:
+        area_t = img.shape[0] * img.shape[1] * area_t
     img = cv2.imread(img) if type(img) is str else img
 
     img_center = (int(img.shape[1] / 2), int(img.shape[0] / 2))
@@ -201,16 +215,14 @@ def decode_pieces(main_square):
 
 def cv_detector(img_orig):
     """Returns decoded char code"""
-    top_match = get_best_match(img_orig)
+    top_match = get_best_match(img_orig, area_t=0.01)
     x, y, w, h = cv2.boundingRect(top_match['object'])
     top_match = img_orig[y:y + h, x:x + w]
-    # cv2.imshow('image', top_match)
-    # cv2.waitKey(0)
+
     trapeze = get_trapeze_contour(top_match)
     square = four_point_transform(top_match, trapeze.reshape(4, 2))
-    # cv2.imshow('image', square)
-    # cv2.waitKey(0)
-    square_no_border = get_best_match(square, border_threshold=True)
+
+    square_no_border = get_best_match(square, area_t=0.6, border_threshold=True)
 
     if square_no_border:
         x, y, w, h = cv2.boundingRect(square_no_border['object'])
@@ -218,13 +230,14 @@ def cv_detector(img_orig):
         w, h = int(w * 1.4), int(h * 1.4)
         square = square[y:y + h, x:x + w]
     square = change_brightness(square, value=40)  # increases
-    # square = cv2.convertScaleAbs(square, alpha=2, beta=0)
-    # square = cv2.blur(square, (5, 5))
     # cv2.imshow('image', square)
     # cv2.waitKey(0)
+    # square = cv2.convertScaleAbs(square, alpha=2, beta=0)
+    # square = cv2.blur(square, (5, 5))
+
     return decode_pieces(square)
 
 
 if __name__ == '__main__':
     code = cv_detector(cv2.imread(
-        'C:\\Users\\maxfyk\\Downloads\\photo_2022-08-12_16-24-37.jpg'))  # C:\\Users\\maxfyk\\Downloads\\photo_2022-08-15_12-32-03.jpg
+        'C:\\Users\\maxfyk\\Downloads\\x-test-2.jpg'))  # C:\\Users\\maxfyk\\Downloads\\photo_2022-08-15_12-32-03.jpg
