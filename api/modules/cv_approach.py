@@ -57,7 +57,7 @@ def get_best_match(img, area_t=5000, border_threshold=False, is_gray=False, cent
                 dist_to_center = abs((x + w / 2) - img_center[0]) + abs((y + h / 2) - img_center[1])
                 is_square_score = (min((w, h)) / max((w, h))) / 10
                 contours[-1]['match-score'] = dist_to_center / is_square_score
-                print(w, h, is_square_score, contours[-1]['match-score'], area)
+                # print(w, h, is_square_score, contours[-1]['match-score'], area)
             else:
                 contours[-1]['match-score'] = -area
     tops = sorted(contours, key=lambda d: d['match-score'])
@@ -190,7 +190,7 @@ def decode_pieces(main_square):
         for piece in pieces:
             stats[piece['name']] = cv2.matchTemplate(tile, piece['img'], cv2.TM_CCOEFF_NORMED).max()
         stats = list(sorted(stats.items(), key=lambda item: -item[1]))
-        print(stats[0][0])
+        # print(stats[0][0])
         codes.append(pieces_names[stats[0][0]])
     out_code = ''
     for i in range(4):
