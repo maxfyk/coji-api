@@ -42,7 +42,6 @@ def coji_decode():
     char_code = None
     if json_request['decode-type'] == 'image':
         image_str = json_request['in-data']
-        print(image_str)
         if 'data:image/' in image_str:  # if image contains a tag
             image_str = image_str.split(',')[1]
         try:
