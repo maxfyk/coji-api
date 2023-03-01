@@ -1,2 +1,2 @@
 # coji-api
-published on coji-code.com
+THIS REPOSETORY MOVED TO [coji-api-mvp](https://github.com/maxfyk/coji-api-mvp).
